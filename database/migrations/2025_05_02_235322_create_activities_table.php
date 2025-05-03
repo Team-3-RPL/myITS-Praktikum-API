@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id(); 
-            $table->string('nama_aktivitas'); 
-            $table->enum('jenis_aktivitas', ['lab', 'pre-test', 'demo', 'praktikum', 'lainnya']); 
-            $table->timestamp('deadline'); 
-            $table->text('deskripsi'); 
-            $table->date('tanggal'); 
+            $table->string('name'); 
+            $table->enum('activity_type', ['lab session', 'pre-test', 'demo', 'practicum']);
+            $table->timestamp('start_time')->nullable();
+            $table->timestamp('end_time')->nullable();  
+            $table->text('description')->nullable();
+            $table->string('location')->nullable();
+            $table->foreignId('practicum_id')->constrained('courses')->onDelete('cascade'); 
             $table->timestamps(); 
         });
     }

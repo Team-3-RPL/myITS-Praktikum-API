@@ -11,10 +11,12 @@ class Activity extends Model
 
 
     protected $fillable = [
-        'nama_aktivitas',
-        'jenis_aktivitas',
-        'deadline',
-        'deskripsi',
-        'tanggal',
+        'name',
+        'activity_type',
+        'start_time',
+        'end_time',
+        'location',
+        'practicum_id',
+        'description',
     ];
 }
