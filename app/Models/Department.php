@@ -5,20 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Practicum extends Model
+class Department extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'description',
-        'location',
-        'schedule',
-        'department_id',
     ];
 
-    public function department()
+    public function practicums()
     {
-        return $this->belongsTo(Department::class);
+        return $this->hasMany(Practicum::class);
     }
 }

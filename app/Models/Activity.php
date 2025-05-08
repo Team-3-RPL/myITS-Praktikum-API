@@ -9,14 +9,29 @@ class Activity extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'name',
         'activity_type',
+        'has_submission',
         'start_time',
         'end_time',
+        'description',
         'location',
         'practicum_id',
-        'description',
     ];
+
+    public function practicum()
+    {
+        return $this->belongsTo(Practicum::class);
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
+    }
 }

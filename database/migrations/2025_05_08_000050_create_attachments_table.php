@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('link')->nullable();
             $table->string('filename')->nullable();
-            $table->foreignId('task_id')->constrained('tasks')->onDelete('cascade');
+            $table->foreignId('submission_id')->nullable()->constrained('submissions')->onDelete('cascade');
+            $table->foreignId('activity_id')->nullable()->constrained('activities')->onDelete('cascade');
             $table->timestamps();
         });
     }
