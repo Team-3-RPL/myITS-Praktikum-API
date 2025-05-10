@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Practicum;
+use App\Models\Activity;
 use App\Http\Requests\StorePracticumRequest;
 use App\Http\Requests\UpdatePracticumRequest;
 
@@ -13,7 +14,7 @@ class PracticumController extends Controller
      */
     public function index()
     {
-        //
+        return Practicum::all();
     }
 
     /**
@@ -29,7 +30,15 @@ class PracticumController extends Controller
      */
     public function store(StorePracticumRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $practicum = Practicum::create($validated);
+
+        return response()->json([
+            'status' => 'true',
+            'message' => 'Practicum created successfully',
+            'data' => $practicum,
+        ], 201);
     }
 
     /**
@@ -37,7 +46,13 @@ class PracticumController extends Controller
      */
     public function show(Practicum $practicum)
     {
-        //
+        $practicum = Practicum::with('activities')->find($practicum->id);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Practicum retrieved successfully',
+            'data' => $practicum,
+        ], 200);
     }
 
     /**
@@ -53,7 +68,15 @@ class PracticumController extends Controller
      */
     public function update(UpdatePracticumRequest $request, Practicum $practicum)
     {
-        //
+        $validated = $request->validated();
+
+        $practicum = Practicum::update($validated);
+
+        return response()->json([
+            'status' => 'true',
+            'message' => 'Practicum updated successfully',
+            'data' => $practicum,
+        ], 200);
     }
 
     /**
@@ -61,6 +84,11 @@ class PracticumController extends Controller
      */
     public function destroy(Practicum $practicum)
     {
-        //
+        $practicum->delete();
+
+        return response()->json([
+            'status' => 'true',
+            'message' => 'Practicum deleted successfully',
+        ], 200);
     }
 }

@@ -4,14 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePracticumRequest extends FormRequest
+class UpdateActivityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        //return false;
+        return true;
     }
 
     /**
@@ -21,14 +22,15 @@ class UpdatePracticumRequest extends FormRequest
      */
     public function rules(): array
     {
-        $practicumId = $this->route('practicum'); // get {practicum} route param
-
         return [
-            'name' => 'required|string|max:255|unique:practicums,name,' . $practicumId,
-            'department_id' => 'required|exists:departments,id',
+            'name' => 'sometimes|string|max:255',
+            'activity_type' => 'sometimes|string|max:255',
+            'has_submission' => 'sometimes|boolean',
+            'start_time' => 'sometimes|date',
+            'end_time' => 'sometimes|date|after_or_equal:start_time',
             'description' => 'nullable|string|max:255',
             'location' => 'nullable|string|max:255',
-            'schedule' => 'nullable|string|max:255',
+            'practicum_id' => 'sometimes|exists:practicums,id',
         ];
     }
 }

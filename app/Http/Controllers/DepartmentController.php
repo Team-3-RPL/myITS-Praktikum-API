@@ -13,7 +13,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        //
+        return Department::all();
     }
 
     /**
@@ -29,7 +29,13 @@ class DepartmentController extends Controller
      */
     public function store(StoreDepartmentRequest $request)
     {
-        //
+        $department = Department::create($request->validated());
+
+        return response()->json([
+            'status' => 'true',
+            'message' => 'Department created successfully',
+            'data' => $department,
+        ], 201);
     }
 
     /**
@@ -53,7 +59,13 @@ class DepartmentController extends Controller
      */
     public function update(UpdateDepartmentRequest $request, Department $department)
     {
-        //
+        $department->update($request->validated());
+
+        return response()->json([
+            'status' => 'true',
+            'message' => 'Department updated successfully',
+            'data' => $department,
+        ], 200);
     }
 
     /**
@@ -61,6 +73,10 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
-        //
+        $department->delete();
+        return response()->json([
+            'status' => 'true',
+            'message' => 'Department deleted successfully',
+        ], 200);
     }
 }

@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Activity;
+use App\Http\Requests\StoreActivityRequest;
+use App\Http\Requests\UpdateActivityRequest;
+
+class ActivityController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Activities retrieved successfully',
+            'data' => Activity::all(),
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreActivityRequest $request)
+    {
+        $validated = $request->validated();
+
+        $activity = Activity::create($validated);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Activity created successfully',
+            'data' => $activity,
+        ], 201);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Activity $activity)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Activity $activity)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateActivityRequest $request, Activity $activity)
+    {
+        $validated = $request->validated();
+
+        $activity->update($validated);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Activity updated successfully',
+            'data' => $activity,
+        ], 200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Activity $activity)
+    {
+        //
+    }
+}

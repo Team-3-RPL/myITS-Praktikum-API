@@ -21,4 +21,8 @@ class Practicum extends Model
     {
         return $this->belongsTo(Department::class);
     }
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }

@@ -11,7 +11,8 @@ class StorePracticumRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        //return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,11 @@ class StorePracticumRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255|unique:practicums,name',
+            'department_id' => 'required|exists:departments,id',
+            'description' => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'schedule' => 'nullable|string|max:255',
         ];
     }
 }
