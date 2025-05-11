@@ -30,3 +30,13 @@ Route::prefix('activity')->name('activity.')->group(function () {
     Route::patch('/{id}', [ActivityController::class, 'update'])->name('update'); // PATCH /activity
     Route::delete('/{id}', [ActivityController::class, 'destroy'])->name('destroy'); // DELETE /activity
 });
+
+use App\Http\Controllers\AuthController;
+
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
+
+Route::middleware(['auth:sanctum', 'role:coordinator'])->get('/admin', function () {
+    return response()->json(['message' => 'Welcome, Coordinator']);
+});
