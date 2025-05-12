@@ -55,5 +55,7 @@ class DatabaseSeeder extends Seeder
             'filename' => 'test2.docx',
             'activity_id' => $activity->id,
         ]);
+        // TODO: Add dummy data for (2 user with student role), (user enrolled to pracitcum data), (2 submission each
+        // (1 more practicum, 1 more activity), (2 attachment each submission and activity, along with its actual file)
     }
 }

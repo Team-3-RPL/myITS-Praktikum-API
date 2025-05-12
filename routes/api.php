@@ -46,6 +46,7 @@ Route::prefix('submission')->name('submission.')->group(function () {
     Route::middleware('auth:sanctum')->get('/file/{attachment_id}', [SubmissionController::class, 'download'])->name('download');
     Route::middleware('auth:sanctum')->delete('/file/{attachment_id}', [SubmissionController::class, 'deleteAttachment'])->name('deleteAttachment');
     Route::middleware('auth:sanctum')->post('/{activity_id}/file', [SubmissionController::class, 'addFile'])->name('addFile');
+    // TODO : Add authorization for grading only for assistant
     Route::middleware('auth:sanctum')->patch('/{submission}/grade', [SubmissionController::class, 'gradeSubmission'])->name('gradeSubmission');
     Route::middleware('auth:sanctum')->patch('/{submission}', [SubmissionController::class, 'update'])->name('update');
     Route::middleware('auth:sanctum')->delete('/{submission}', [SubmissionController::class, 'destroy'])->name('destroy');
