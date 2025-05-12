@@ -14,7 +14,15 @@ class PracticumController extends Controller
      */
     public function index()
     {
-        return Practicum::all();
+        $user = auth()->user();
+
+        $practicums = $user->practicums()->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Practicums retrieved successfully',
+            'data' => $practicums,
+        ]);
     }
 
     /**
@@ -46,6 +54,15 @@ class PracticumController extends Controller
      */
     public function show(Practicum $practicum)
     {
+        $user = auth()->user();
+        $isEnrolled = $user->practicums()->where('practicum_id', $practicum->id)->exists();
+
+        if (!$isEnrolled) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized',
+            ], 403);
+        }
         $practicum = Practicum::with('activities')->find($practicum->id);
 
         return response()->json([

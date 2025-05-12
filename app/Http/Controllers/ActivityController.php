@@ -11,12 +11,22 @@ class ActivityController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($activityId)
     {
+        $activity = Activity::with('submissions')  // eager load submissions and their attachments
+            ->find($activityId);
+
+        if (!$activity) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Activity not found',
+            ], 404);
+        }
+
         return response()->json([
-            'status' => 'success',
-            'message' => 'Activities retrieved successfully',
-            'data' => Activity::all(),
+            'status' => true,
+            'message' => 'Activity and submissions retrieved successfully',
+            'data' => $activity,
         ]);
     }
 
@@ -49,7 +59,12 @@ class ActivityController extends Controller
      */
     public function show(Activity $activity)
     {
-        //
+        $activity = Activity::with('attachments')->find($activity->id);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Activity retrieved successfully',
+            'data' => $activity,
+        ], 200);
     }
 
     /**

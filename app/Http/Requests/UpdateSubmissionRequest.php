@@ -11,7 +11,10 @@ class UpdateSubmissionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $submission = $this->route('submission_id');
+
+        // Check if the authenticated user owns the submission
+        return $submission->user_id === auth()->id();
     }
 
     /**
@@ -22,7 +25,7 @@ class UpdateSubmissionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'comment' => 'required|string|max:255',
         ];
     }
 }

@@ -19,7 +19,6 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'nrp' => 'required|string|size:11|unique:users',
             'role' => 'required|in:student,assistant,coordinator',
-            'department_id' => 'required|exists:departments,id',
         ]);
 
         if ($validator->fails()) {
@@ -32,7 +31,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'nrp' => $request->nrp,
             'role' => $request->role,
-            'department_id' => $request->department_id,
+            'department_id' => 1, //Default department_id TC
         ]);
 
         return response()->json(['user' => $user], 201);
@@ -46,6 +45,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('API Token')->plainTextToken;
+            
 
             return response()->json([
                 'user' => $user,
