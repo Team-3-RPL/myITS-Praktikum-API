@@ -11,10 +11,10 @@ class UpdateSubmissionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $submission = $this->route('submission_id');
+        $submission = $this->route('submission');
 
         // Check if the authenticated user owns the submission
-        return $submission->user_id === auth()->id();
+        return $submission && $submission->user_id === auth()->id();
     }
 
     /**
