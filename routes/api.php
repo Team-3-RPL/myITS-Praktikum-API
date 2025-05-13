@@ -50,6 +50,6 @@ Route::prefix('submission')->name('submission.')->group(function () {
     Route::middleware(['auth:sanctum', 'role:assistant'])->patch('/{submission}/grade', [SubmissionController::class, 'gradeSubmission'])->name('gradeSubmission');
     Route::middleware('auth:sanctum')->patch('/{submission}', [SubmissionController::class, 'update'])->name('update');
     Route::middleware('auth:sanctum')->delete('/{submission}', [SubmissionController::class, 'destroy'])->name('destroy');
-    Route::middleware('auth:sanctum')->get('/{activity_id}', [SubmissionController::class, 'show'])->name('show');
+    Route::middleware('auth:sanctum')->get('/{submission}', [SubmissionController::class, 'show'])->name('show');
      Route::middleware('auth:sanctum')->post('/{activity_id}', [SubmissionController::class, 'store'])->name('store');
 });
