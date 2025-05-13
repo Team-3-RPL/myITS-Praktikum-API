@@ -40,8 +40,9 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
 
 Route::middleware(['auth:sanctum', 'role:coordinator'])->get('/admin', function () {
-    return response()->json(['message' => 'Welcome, Coordinator']);
+    return response()->json(['message' => 'Hello Coordinator']);
 });
+
 Route::prefix('submission')->name('submission.')->group(function () {
     Route::middleware('auth:sanctum')->get('/file/{attachment_id}', [SubmissionController::class, 'download'])->name('download');
     Route::middleware('auth:sanctum')->delete('/file/{attachment_id}', [SubmissionController::class, 'deleteAttachment'])->name('deleteAttachment');
