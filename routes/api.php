@@ -27,6 +27,7 @@ Route::prefix('practicum')->name('practicum.')->group(function () {
 
 Route::prefix('activity')->name('activity.')->group(function () {
     //Route::middleware('auth:sanctum')->get('/', [ActivityController::class, 'index'])->name('index');     // GET /activity
+    Route::middleware('auth:sanctum')->get('/file/{attachment_id}', [ActivityController::class, 'download'])->name('download');
     Route::middleware('auth:sanctum')->get('/{activity}', [ActivityController::class, 'show'])->name('show');  // GET /activity/{id}
     Route::middleware(['auth:sanctum', 'role:assistant'])->get('/{activity}/submissions', [ActivityController::class, 'index'])->name('index'); // GET /activity/{id}/submissions (assistant)
     //Route::post('/', [ActivityController::class, 'store'])->name('store'); // POST /activity
