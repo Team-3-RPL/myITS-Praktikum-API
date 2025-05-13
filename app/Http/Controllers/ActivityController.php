@@ -75,12 +75,12 @@ class ActivityController extends Controller
         $attachment = Attachment::findOrFail($attachmentId);
 
         // Ensure the authenticated user owns the submission
-        $submission = Activity::findOrFail($attachment->submission_id);
-        if ($submission->user_id !== auth()->id()) {
+        $activity = Activity::findOrFail($attachment->activity_id);
+        if($activity == null) {
             return response()->json([
                 'status' => false,
-                'message' => 'Unauthorized to access this file',
-            ], 403);
+                'message' => 'Activity not found',
+            ], 404);
         }
 
         // Get the file path from the attachment link
