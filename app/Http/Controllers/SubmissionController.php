@@ -49,7 +49,6 @@ class SubmissionController extends Controller
                     'submission_id' => $submission->id,
                     'link' => $path,
                     'filename' => $file->getClientOriginalName(),
-                    'activity_id' => $activity_id,
                 ]);
             }
         }
@@ -64,20 +63,19 @@ class SubmissionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($activity_id)
+    public function show(Submission $submission)
     {
-        $userId = auth()->id();
-        $submission = Submission::with('attachments')
-            ->where('user_id', $userId)
-            ->where('activity_id', $activity_id)
-            ->first();
+        $user = auth()->user();
 
-        if (!$submission) {
+        // Check if the user owns the submission or is an assistant
+        if ($submission->user_id !== $user->id && $user->role !== 'assistant') {
             return response()->json([
                 'status' => false,
-                'message' => 'Submission not found for this activity.',
-            ], 404);
+                'message' => 'Unauthorized to view this submission.',
+            ], 403);
         }
+
+        $submission->load('attachments');
 
         return response()->json([
             'status' => true,
@@ -120,9 +118,10 @@ class SubmissionController extends Controller
 
         $attachment = Attachment::findOrFail($attachmentId);
 
-        // Ensure the authenticated user owns the submission
+        // Ensure the authenticated user owns the submission or is an assistant
+        $user = auth()->user();
         $submission = Submission::findOrFail($attachment->submission_id);
-        if ($submission->user_id !== auth()->id()) {
+        if ($submission->user_id !== $user->id && $user->role !== 'assistant') {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized to access this file',
@@ -195,7 +194,6 @@ class SubmissionController extends Controller
                 'submission_id' => $submission->id,
                 'link' => $path,
                 'filename' => $file->getClientOriginalName(),
-                'activity_id' => $activity_id,
             ]);
         }
 

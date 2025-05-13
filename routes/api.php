@@ -27,9 +27,9 @@ Route::prefix('practicum')->name('practicum.')->group(function () {
 
 Route::prefix('activity')->name('activity.')->group(function () {
     //Route::middleware('auth:sanctum')->get('/', [ActivityController::class, 'index'])->name('index');     // GET /activity
-    // TODO: Add authorization only for assistant
+    Route::middleware('auth:sanctum')->get('/file/{attachment_id}', [ActivityController::class, 'download'])->name('download');
     Route::middleware('auth:sanctum')->get('/{activity}', [ActivityController::class, 'show'])->name('show');  // GET /activity/{id}
-    Route::middleware('auth:sanctum')->get('/{activity}/submissions', [ActivityController::class, 'index'])->name('index'); // GET /activity/{id}/submissions (assistant)
+    Route::middleware(['auth:sanctum', 'role:assistant'])->get('/{activity}/submissions', [ActivityController::class, 'index'])->name('index'); // GET /activity/{id}/submissions (assistant)
     //Route::post('/', [ActivityController::class, 'store'])->name('store'); // POST /activity
     //Route::patch('/{id}', [ActivityController::class, 'update'])->name('update'); // PATCH /activity
     //Route::delete('/{id}', [ActivityController::class, 'destroy'])->name('destroy'); // DELETE /activity
@@ -40,16 +40,16 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
 
 Route::middleware(['auth:sanctum', 'role:coordinator'])->get('/admin', function () {
-    return response()->json(['message' => 'Welcome, Coordinator']);
+    return response()->json(['message' => 'Hello Coordinator']);
 });
+
 Route::prefix('submission')->name('submission.')->group(function () {
     Route::middleware('auth:sanctum')->get('/file/{attachment_id}', [SubmissionController::class, 'download'])->name('download');
     Route::middleware('auth:sanctum')->delete('/file/{attachment_id}', [SubmissionController::class, 'deleteAttachment'])->name('deleteAttachment');
     Route::middleware('auth:sanctum')->post('/{activity_id}/file', [SubmissionController::class, 'addFile'])->name('addFile');
-    // TODO : Add authorization for grading only for assistant
-    Route::middleware('auth:sanctum')->patch('/{submission}/grade', [SubmissionController::class, 'gradeSubmission'])->name('gradeSubmission');
+    Route::middleware(['auth:sanctum', 'role:assistant'])->patch('/{submission}/grade', [SubmissionController::class, 'gradeSubmission'])->name('gradeSubmission');
     Route::middleware('auth:sanctum')->patch('/{submission}', [SubmissionController::class, 'update'])->name('update');
     Route::middleware('auth:sanctum')->delete('/{submission}', [SubmissionController::class, 'destroy'])->name('destroy');
-    Route::middleware('auth:sanctum')->get('/{activity_id}', [SubmissionController::class, 'show'])->name('show');
+    Route::middleware('auth:sanctum')->get('/{submission}', [SubmissionController::class, 'show'])->name('show');
      Route::middleware('auth:sanctum')->post('/{activity_id}', [SubmissionController::class, 'store'])->name('store');
 });

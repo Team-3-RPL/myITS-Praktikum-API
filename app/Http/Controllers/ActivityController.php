@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Attachment;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
+use Illuminate\Support\Facades\Storage;
 
 class ActivityController extends Controller
 {
@@ -66,6 +68,34 @@ class ActivityController extends Controller
             'data' => $activity,
         ], 200);
     }
+    public function download($attachmentId)
+    {
+        // Find the attachment by ID
+
+        $attachment = Attachment::findOrFail($attachmentId);
+
+        // Ensure the authenticated user owns the submission
+        $activity = Activity::findOrFail($attachment->activity_id);
+        if($activity == null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Activity not found',
+            ], 404);
+        }
+
+        // Get the file path from the attachment link
+        $filePath = $attachment->link;
+        
+        // Check if the file exists in storage
+        if (Storage::exists($filePath)) {
+            return response()->download(Storage::path($filePath)); // Secure file download
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'File not found',
+        ], 404);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -98,4 +128,5 @@ class ActivityController extends Controller
     {
         //
     }
+
 }
