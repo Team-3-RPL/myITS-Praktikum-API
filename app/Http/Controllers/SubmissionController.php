@@ -194,7 +194,6 @@ class SubmissionController extends Controller
                 'submission_id' => $submission->id,
                 'link' => $path,
                 'filename' => $file->getClientOriginalName(),
-                'activity_id' => $activity_id,
             ]);
         }
 
