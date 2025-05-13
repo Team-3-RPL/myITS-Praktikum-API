@@ -157,7 +157,7 @@ class SubmissionController extends Controller
         }
 
         // Delete the file from storage
-        Storage::delete($attachment->link);
+        Storage::disk('s3')->delete($attachment->link);
 
         // Delete the attachment record
         $attachment->delete();
@@ -171,7 +171,7 @@ class SubmissionController extends Controller
     {
         // Validate: multiple files allowed, each file max 10MB
         $validated = $request->validate([
-            'files' => 'required|array',
+            'files' => 'required|array|min:1',
             'files.*' => 'file|max:10240', // 10MB max per file
         ]);
 
@@ -189,7 +189,7 @@ class SubmissionController extends Controller
 
         // Store each file
         foreach ($request->file('files') as $file) {
-            $path = $file->store('submissions'); // private storage
+            $path = Storage::disk('s3')->put('submissions', $file); // cloud storage
 
             $submission->attachments()->create([
                 'submission_id' => $submission->id,
@@ -246,7 +246,7 @@ class SubmissionController extends Controller
 
         // Delete the submission and its attachments
         $submission->attachments()->each(function ($attachment) {
-            Storage::delete($attachment->link); // Delete the file from storage
+            Storage::disk('s3')->delete($attachment->link); // Delete the file from storage
             $attachment->delete(); // Delete the attachment record
         });
 
