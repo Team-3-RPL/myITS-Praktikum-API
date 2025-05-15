@@ -26,6 +26,6 @@ jobs:
           #RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
       - name: Run Laravel Migrations
-        run: railway run --service <YOUR_SERVICE_ID> -- php -v
+        run: railway run --service=${{ secrets.RAILWAY_SERVICE }} -- php -v
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
