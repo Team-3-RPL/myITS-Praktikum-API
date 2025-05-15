@@ -25,6 +25,11 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
+      - name: Install Composer Dependencies
+        run: railway run --service=${{ secrets.RAILWAY_SERVICE }} -- composer install --no-interaction --prefer-dist --optimize-autoloader
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
       - name: Run Laravel Migrations
         run: railway run --service=${{ secrets.RAILWAY_SERVICE }} -- php artisan migrate --force
         env:
