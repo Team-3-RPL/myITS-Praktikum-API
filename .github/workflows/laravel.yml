@@ -7,21 +7,16 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    container: ghcr.io/railwayapp/cli:latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install Railway CLI
+        run: curl -sSL https://railway.app/cli.sh | bash
+
       - name: Deploy to Railway
         run: railway up --service=${{ secrets.RAILWAY_SERVICE }} --ci
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-
-      - name: Check PHP and Artisan version
-        run: |
-          railway run --service ${{ secrets.RAILWAY_SERVICE }} "php -v"
-          railway run --service ${{ secrets.RAILWAY_SERVICE }} "php artisan --version"
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
