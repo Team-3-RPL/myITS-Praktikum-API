@@ -15,6 +15,10 @@ jobs:
 
       - name: Deploy to Railway
         run: railway up --service=${{ secrets.RAILWAY_SERVICE }} --ci
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
       - name: Run Laravel Migrations
         run: railway run php artisan migrate --force --service=${{ secrets.RAILWAY_SERVICE }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
