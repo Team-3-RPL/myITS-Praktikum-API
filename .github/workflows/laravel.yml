@@ -30,6 +30,11 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
+      - name: Clear and Cache Laravel Config
+        run: railway run --service=${{ secrets.RAILWAY_SERVICE }} -- php artisan config:clear && php artisan config:cache
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
       - name: Run Laravel Migrations
         run: railway run --service=${{ secrets.RAILWAY_SERVICE }} -- php artisan migrate --force
         env:
