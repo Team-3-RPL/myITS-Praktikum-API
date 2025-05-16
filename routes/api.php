@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\PracticumController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\SubmissionController;
@@ -17,12 +18,13 @@ Route::prefix('department')->name('department.')->group(function () {
     Route::delete('/{id}', [DepartmentController::class, 'destroy'])->name('destroy'); // DELETE /department
 });
 */
+Route::middleware(['auth:sanctum', 'role:coordinator'])->post('/enroll/{user_id}/{practicum_id}', [UserController::class, 'enroll'])->name('enroll'); // POST /enroll/{user_id}/{practicum_id}
 Route::prefix('practicum')->name('practicum.')->group(function () {
     Route::middleware('auth:sanctum')->get('/', [PracticumController::class, 'index'])->name('index');     // GET /practicum
     Route::middleware('auth:sanctum')->get('/{practicum}', [PracticumController::class, 'show'])->name('show'); // GET /practicum/{id}
-    //Route::post('/', [PracticumController::class, 'store'])->name('store'); // POST /practicum
-    //Route::patch('/{id}', [PracticumController::class, 'update'])->name('update'); // PATCH /practicum
-    //Route::delete('/{id}', [PracticumController::class, 'destroy'])->name('destroy'); // DELETE /practicum
+    Route::middleware(['auth:sanctum', 'role:coordinator'])->post('/', [PracticumController::class, 'store'])->name('store'); // POST /practicum
+    Route::middleware(['auth:sanctum', 'role:coordinator'])->patch('/{id}', [PracticumController::class, 'update'])->name('update'); // PATCH /practicum
+    Route::middleware(['auth:sanctum', 'role:coordinator'])->delete('/{id}', [PracticumController::class, 'destroy'])->name('destroy'); // DELETE /practicum
 });
 
 Route::prefix('activity')->name('activity.')->group(function () {
@@ -30,9 +32,9 @@ Route::prefix('activity')->name('activity.')->group(function () {
     Route::middleware('auth:sanctum')->get('/file/{attachment_id}', [ActivityController::class, 'download'])->name('download');
     Route::middleware('auth:sanctum')->get('/{activity}', [ActivityController::class, 'show'])->name('show');  // GET /activity/{id}
     Route::middleware(['auth:sanctum', 'role:assistant'])->get('/{activity}/submissions', [ActivityController::class, 'index'])->name('index'); // GET /activity/{id}/submissions (assistant)
-    //Route::post('/', [ActivityController::class, 'store'])->name('store'); // POST /activity
-    //Route::patch('/{id}', [ActivityController::class, 'update'])->name('update'); // PATCH /activity
-    //Route::delete('/{id}', [ActivityController::class, 'destroy'])->name('destroy'); // DELETE /activity
+    Route::middleware(['auth:sanctum', 'role:coordinator'])->post('/', [ActivityController::class, 'store'])->name('store'); // POST /activity
+    Route::middleware(['auth:sanctum', 'role:coordinator'])->patch('/{id}', [ActivityController::class, 'update'])->name('update'); // PATCH /activity
+    Route::middleware(['auth:sanctum', 'role:coordinator'])->delete('/{id}', [ActivityController::class, 'destroy'])->name('destroy'); // DELETE /activity
 });
 
 Route::post('register', [AuthController::class, 'register']);
