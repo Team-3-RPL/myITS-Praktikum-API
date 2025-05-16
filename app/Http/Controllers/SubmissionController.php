@@ -133,7 +133,11 @@ class SubmissionController extends Controller
         
         // Check if the file exists in storage
         if (Storage::exists($filePath)) {
-            return response()->download(Storage::path($filePath)); // Secure file download
+            $stream = Storage::disk('s3')->readStream($filePath);
+
+            return response()->streamDownload(function () use ($stream) {
+               fpassthru($stream) ;
+            }, basename($filePath));
         }
 
         return response()->json([
